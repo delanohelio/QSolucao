@@ -1,5 +1,16 @@
-chrome.browserAction.onClicked.addListener(function(tab) {
-	chrome.tabs.executeScript(null, { file: "jquery.js" }, function() {
-	    chrome.tabs.executeScript(null, { file: "content.js" });
+document.addEventListener('DOMContentLoaded', function () {
+	document.getElementById("grade").addEventListener("click", function(){
+		popupButtonClick("contentGrade.js");
+	});
+	document.getElementById("presence").addEventListener("click", function(){
+		popupButtonClick("contentPresence.js");
 	});
 });
+
+function popupButtonClick(injectScript) {
+	chrome.tabs.executeScript(null, { file: "jquery.js" }, function() {
+	    chrome.tabs.executeScript(null, { file: "content.js" }, function() {
+	    	chrome.tabs.executeScript(null, { file:  injectScript});
+	    });
+	});
+}
