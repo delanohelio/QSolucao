@@ -12,10 +12,18 @@ function initGrade(){
 		var matricula = alunos[inputAluno.val()];
 		var inputNota = $("[name=NOTA"+matricula+"]");
 		var inputObs = $("[name=OBS"+matricula+"]");
-		var notaProva = parseInt(inputProva.val());
+		var notaProva = parseFloat(inputProva.val().replace(',', '.'));
 		var notaAtividade = parseInt(inputAtividade.val());
-		inputNota.val(notaProva+notaAtividade);
-		inputObs.val("Miniteste: " + notaProva+"; Atividade: "+notaAtividade);
+		if(!isNaN(notaAtividade)){
+			inputObs.val("Miniteste: " + notaProva+"; Atividade: "+notaAtividade);
+			notaProva += notaAtividade;
+		}
+		inputNota.val(notaProva.toString().replace('.', ','));
+		inputAluno.val("")
+		inputProva.val("")
+		inputAtividade.val("")
+		inputAluno.focus();
+		
 	});
 	populateAlunos();
 }
