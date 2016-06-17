@@ -19,11 +19,17 @@ function initGrade(){
 			notaProva += notaAtividade;
 		}
 		inputNota.val(notaProva.toString().replace('.', ','));
-		inputAluno.val("")
-		inputProva.val("")
-		inputAtividade.val("")
+		inputAluno.val("");
+		inputProva.val("");
+		inputAtividade.val("");
 		inputAluno.focus();
 		
+	});
+	$(inputProva).keyup(function(e){
+	    if(e.keyCode == 13 && !isNaN(alunos[inputAluno.val()]))
+	    {
+	        buttonOk.trigger("click");
+	    }
 	});
 	populateAlunos();
 }
@@ -44,6 +50,14 @@ function initPresence() {
 			
 		}
 		inputFaltasAluno.val(inputFaltas.val());
+		inputAluno.val("");
+		inputAluno.focus();
+	});
+	$(inputFaltas).keyup(function(e){
+	    if(e.keyCode == 13)
+	    {
+	        buttonOk.trigger("click");
+	    }
 	});
 	populateAlunos();
 }
@@ -62,6 +76,4 @@ function populateAlunos() {
 	alunos["Todos"] = -1;
 	listAlunos.append($("<option>" + "Todos" +"</option>"));
 }
-
-
 
