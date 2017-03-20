@@ -3,7 +3,7 @@ var listAlunos;
 var alunos = {};
 
 function initGrade(){
-	inputAluno = $('<input class="extension" id="aluno" type="text" size=35 list="alunos">').insertAfter("p.conteudoTitulo");
+	inputAluno = $('<input class="extension" id="aluno" type="text" size=35 list="alunos">').insertBefore("table.conteudoTexto");
 	listAlunos = $('<datalist class="extension" id="alunos">').insertAfter(inputAluno);
 	var inputProva = $('<input class="extension" id="prova" type="text">').insertAfter(listAlunos);
 	var inputAtividade = $('<input class="extension" id="atividade" type="text">').insertAfter(inputProva);
