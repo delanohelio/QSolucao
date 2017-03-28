@@ -1,9 +1,9 @@
 {
   "manifest_version": 2,
 
-  "name": "Grade QAcademico",
-  "description": "Testing",
-  "version": "0.1",
+  "name": "QAcademico++",
+  "description": "Versão de Teste",
+  "version": "0.1.1",
 
   "browser_action": {
     "default_icon": "icon.png",
