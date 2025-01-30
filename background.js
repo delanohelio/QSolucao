@@ -14,6 +14,12 @@ document.addEventListener('DOMContentLoaded', function () {
 	document.getElementById("download").addEventListener("click", function(){
 		popupButtonClick("download.js");
 	});
+	document.getElementById("save").addEventListener("click", function(){
+		popupButtonClick("save.js");
+	});
+	document.getElementById("load").addEventListener("click", function(){
+		popupButtonClick("load.js");
+	});
 });
 
 function popupButtonClick(injectScript) {

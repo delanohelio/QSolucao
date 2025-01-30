@@ -2,36 +2,90 @@ var inputAluno;
 var listAlunos;
 var alunos = {};
 
-function initGrade(){
-	inputAluno = $('<input class="extension" id="aluno" type="text" size=35 list="alunos">').insertBefore("table.conteudoTexto");
+function initGrade() {
+
+	var inputFile = $('<input class="extension" type="file" id="fileInput" accept=".csv,.tsv">').insertBefore("table.conteudoTexto")
+	inputAluno = $('<input class="extension" id="aluno" type="text" size=35 list="alunos">').insertAfter(inputFile);
 	listAlunos = $('<datalist class="extension" id="alunos">').insertAfter(inputAluno);
 	var inputProva = $('<input class="extension" id="prova" type="text">').insertAfter(listAlunos);
 	//var inputAtividade = $('<input class="extension" id="atividade" type="text">').insertAfter(inputProva);
 	var buttonOk = $('<button class="extension" id="ok" type="button">OK</button><br class="extension">').insertAfter(inputProva);
-	buttonOk.click(function() {
-		var matricula = alunos[inputAluno.val()]["code"];
-		var inputNota = $("[name=NOTA"+matricula+"]");
-		//var inputObs = $("[name=OBS"+matricula+"]");
-		var notaProva = parseFloat(inputProva.val().replace(',', '.'));
-		//var notaAtividade = parseInt(inputAtividade.val());
-		/*if(!isNaN(notaAtividade)){
-			inputObs.val("Miniteste: " + notaProva+"; Atividade: "+notaAtividade);
-			notaProva += notaAtividade;
-		}*/
-		inputNota.val(notaProva.toString().replace('.', ','));
+	var buttonSave = $('<button class="extension" id="saveButton">Salvar Nomes em Arquivo</button>').insertBefore("table.conteudoTexto").insertAfter(buttonOk);
+
+	buttonOk.click(function () {
+		setNotaByAluno(inputAluno.val(), inputProva.val(), true)
 		inputAluno.val("");
 		inputProva.val("");
 		//inputAtividade.val("");
 		inputAluno.focus();
-		
 	});
-	$(inputProva).keyup(function(e){
-	    if(e.keyCode == 13 && !isNaN(alunos[inputAluno.val()]["code"]))
-	    {
-	        buttonOk.trigger("click");
-	    }
+	$(inputProva).keyup(function (e) {
+		if (e.keyCode == 13 && !isNaN(alunos[inputAluno.val()]["code"])) {
+			buttonOk.trigger("click");
+		}
 	});
+
+	buttonSave.click(function() {
+
+		// Cria um blob com os nomes em formato de texto
+		const blob = new Blob([Object.keys(alunos).join('\n')], {type: 'text/plain'});
+
+		// Cria um link de download
+		const link = document.createElement('a');
+		link.href = URL.createObjectURL(blob);
+		link.download = 'lista_nomes.txt'; // Nome do arquivo que será baixado
+
+		// Simula o clique no link para baixar o arquivo
+		link.click();
+
+	});
+
+	inputFile.on('change', function (event) {
+		const file = event.target.files[0];
+		if (file) {
+			const reader = new FileReader();
+			reader.onload = function (e) {
+				const text = e.target.result;
+				const rows = text.split('\n'); // Divide em linhas
+
+				rows.forEach(row => {
+					const cells = row.split('\t'); // Divide em células
+					const nomeAluno = cells[0];
+					const notaAluno = cells[1];
+
+					if (nomeAluno in alunos) {
+						if(notaAluno.trim() !== "")
+							setNotaByAluno(nomeAluno, notaAluno, false)
+						else
+							console.log("Aluno " + nomeAluno + " sem nota")
+					} else {
+						console.log("Não achamos o aluno: " + nomeAluno)
+					}
+
+				});
+			};
+			reader.readAsText(file); // Lê o arquivo como texto
+		}
+	});
+
 	populateAlunos();
+}
+
+function setNotaByAluno(nomeAluno, notaAluno, clear) {
+	var matricula = alunos[nomeAluno]["code"];
+	var inputNota = $("[name=NOTA"+matricula+"]");
+	//var inputObs = $("[name=OBS"+matricula+"]");
+	var notaProva = parseFloat(notaAluno.replace(',', '.'));
+	//var notaAtividade = parseInt(inputAtividade.val());
+	/*if(!isNaN(notaAtividade)){
+        inputObs.val("Miniteste: " + notaProva+"; Atividade: "+notaAtividade);
+        notaProva += notaAtividade;
+    }*/
+	inputNota.val(notaProva.toString().replace('.', ','));
+
+	if(clear) {
+
+	}
 }
 
 function initPresence() {
